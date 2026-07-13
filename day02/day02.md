@@ -84,7 +84,7 @@ Add at least one variable with:
 - a **`validation`** block (e.g. only allow certain values),
 - the **`sensitive = true`** flag.
 
-**[`./variables.tf`](./variables.tf)**
+[`variables.tf`](./variables.tf)
 
 ### Task 3: Locals, Outputs & Functions
 - Use a **`locals`** block to compute a value (e.g. a common `name_prefix` or merged tags).
@@ -92,7 +92,8 @@ Add at least one variable with:
 - Use at least **3 built-in functions** — e.g. `upper()`, `merge()`, `join()`, `lookup()`, `length()`, `format()`.
   Explore them live with `terraform console`:
 
-**[`./locals.tf`](.locals.tf)**
+[`locals.tf`](./locals.tf)  [`outputs.tf`](./outputs.tf)
+
 
 <img width="1067" height="347" alt="3" src="https://github.com/user-attachments/assets/427e5644-a5c0-458d-9872-d62652432b81" />
 
