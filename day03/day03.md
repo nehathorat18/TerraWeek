@@ -68,7 +68,11 @@ Extend the config to practice each of these:
 - **`for_each`** — create resources from a `map`/`set` (preferred over `count` for named things).
 - **`depends_on`** — force an explicit ordering.
 - **`lifecycle`** — try `create_before_destroy`, `prevent_destroy`, and `ignore_changes`.
-
+| Lifecycle Rule | Easy Memory Trick |
+|----------------|-------------------|
+| `create_before_destroy` | **Create first, delete later** |
+| `prevent_destroy` | **Don't delete this resource** |
+| `ignore_changes` | **Ignore changes to selected fields** |
 ```hcl
 lifecycle {
   create_before_destroy = true
