@@ -9,6 +9,7 @@ terraform {
   }
 }
 
+#calling default region
 provider "aws" {
   region = var.aws_region
 
@@ -20,3 +21,9 @@ provider "aws" {
     }
   }
 }
+
+# #calling alias region second 
+# provider "aws" {
+#   region = var.aws_region_2
+#   alias  = "west"
+# }

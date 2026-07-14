@@ -70,6 +70,7 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
+
 # --- Security group ---
 
 resource "aws_security_group" "web" {
@@ -103,24 +104,76 @@ resource "aws_security_group" "web" {
 # That's the modern, reliable pattern: no key pair or SSH ingress needed, and
 # it works even when the instance is replaced. (More on provisioners on Day 6.)
 
+# resource "aws_instance" "web" {
+#   ami                    = data.aws_ami.al2023.id
+#   count                  = 2
+#   instance_type          = var.instance_type
+#   subnet_id              = aws_subnet.public.id
+#   vpc_security_group_ids = [aws_security_group.web.id]
+
+#   user_data = <<-EOF
+#     #!/bin/bash
+#     dnf install -y nginx
+#     echo "<h1>Hello from TerraWeek 2026 🚀</h1>" > /usr/share/nginx/html/index.html
+#     systemctl enable --now nginx
+#   EOF
+
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+
+#   tags = {
+#     Name = "${var.name_prefix}-web${count.index + 1}"
+#   }
+# }
+
 resource "aws_instance" "web" {
+  count = 2
+
   ami                    = data.aws_ami.al2023.id
   instance_type          = var.instance_type
   subnet_id              = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.web.id]
 
-  user_data = <<-EOF
-    #!/bin/bash
-    dnf install -y nginx
-    echo "<h1>Hello from TerraWeek 2026 🚀</h1>" > /usr/share/nginx/html/index.html
-    systemctl enable --now nginx
-  EOF
+  depends_on = [
+    aws_internet_gateway.igw
+  ]
 
-  lifecycle {
-    create_before_destroy = true
-  }
+  user_data = <<-EOF
+#!/bin/bash
+dnf install -y nginx
+systemctl enable --now nginx
+EOF
+
+  # lifecycle {
+  #   create_before_destroy = true
+  #   prevent_destroy       = true
+  #   ignore_changes        = [tags]
+  # }
 
   tags = {
-    Name = "${var.name_prefix}-web"
+    Name = "${var.name_prefix}-webserver-${count.index + 1}"
+  }
+}
+
+# resource "aws_eip" "web" {
+#   instance = aws_instance.web.id
+
+#   tags = {
+#     Name = "${var.name_prefix}-eip"
+#   }
+# }
+
+resource "aws_s3_bucket" "demo" {
+  for_each = toset([
+    "dev",
+    "qa",
+    "prod"
+  ])
+
+  bucket = "neha-${each.key}-terraform-demo-12345"
+
+  tags = {
+    Environment = each.key
   }
 }

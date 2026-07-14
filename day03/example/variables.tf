@@ -1,8 +1,14 @@
 variable "aws_region" {
   description = "AWS region to deploy into."
   type        = string
-  default     = "us-east-1"
+  default     = "us-west-2"
 }
+
+# variable "aws_region_2" {
+#   description = "AWS region to deploy into."
+#   type        = string
+#   default     = "us-west-1"
+# }
 
 variable "vpc_cidr" {
   description = "CIDR block for the VPC."
@@ -27,3 +33,4 @@ variable "name_prefix" {
   type        = string
   default     = "terraweek"
 }
+
