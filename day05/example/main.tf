@@ -64,3 +64,23 @@ module "servers" {
   subnet_id              = local.subnet_id
   vpc_security_group_ids = local.security_group_ids
 }
+
+#Registry
+# module "vpc" {
+#   source  = "terraform-aws-modules/vpc/aws"
+#   version = ">= 5.0, < 6.0"   # ✅ always pin registry/git module versions
+
+#   name = "terraweek-vpc"
+#   cidr = "10.0.0.0/16"
+#   # ...
+# }
+
+#Git tag/ref
+# module "vpc" {
+#   source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=v5.21.0"
+# }
+
+#Git commit SHA
+module "vpc" {
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=22ccfa1730f86711ebf530b765c998a54db304bb"
+}
