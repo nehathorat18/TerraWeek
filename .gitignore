@@ -22,3 +22,4 @@ terraform.rc
 
 # Generated files from examples
 **/greeting.txt
+day06/example/bin/

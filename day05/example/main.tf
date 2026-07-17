@@ -83,4 +83,5 @@ module "servers" {
 #Git commit SHA
 module "vpc" {
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=22ccfa1730f86711ebf530b765c998a54db304bb"
+  enable_flow_log = true
 }

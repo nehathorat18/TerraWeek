@@ -12,6 +12,13 @@ resource "aws_instance" "this" {
   subnet_id              = var.subnet_id
   vpc_security_group_ids = var.vpc_security_group_ids
 
+ metadata_options {
+  http_tokens = "required"
+ }
+ root_block_device {
+  encrypted = true
+}
+
   tags = merge(
     {
       Name        = "${var.environment}-${var.name}"
