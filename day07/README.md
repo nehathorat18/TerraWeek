@@ -1,14 +1,9 @@
 # 🏁 TerraWeek Day 7 — Complete & Submit the Challenge
 
 **Date:** Saturday, 18th July 2026 — 🎉 **Submission Day!**
-
-You made it! 🥳 Over the last 6 days you went from `terraform init` to building real, modern infrastructure with modules, remote state, testing, and CI/CD. Today there's **no new Terraform to learn** — it's time to **package your work and submit it** for prizes.
-
 ---
 
 ## ✅ Pre-Submission Checklist
-
-Go through this before you fill the form. Tick every box:
 
 ### 📂 Your GitHub Repo
 - [✅ ] A **public GitHub repository** for your TerraWeek work.
