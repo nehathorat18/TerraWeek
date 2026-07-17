@@ -19,6 +19,9 @@ terraform workspace new staging
 terraform workspace select staging
 terraform workspace show
 ```
+<img width="1137" height="667" alt="1" src="https://github.com/user-attachments/assets/7e7b4b7c-9726-4c0b-a264-52cd36896b08" />
+
+
 - Use `terraform.workspace` in your config (e.g. size things differently per env):
 ```hcl
 locals {
@@ -43,12 +46,18 @@ locals {
 terraform fmt -recursive
 terraform validate
 ```
+<img width="877" height="117" alt="2" src="https://github.com/user-attachments/assets/962bc601-b76c-410f-b788-3e7fc0819b5c" />
+
+
 - Write a **native test** with the **`terraform test`** framework (Terraform 1.6+). See [`./example/tests/basic.tftest.hcl`](./example/tests/basic.tftest.hcl):
 ```bash
 cd example
 terraform init
 terraform test
 ```
+<img width="1355" height="737" alt="3" src="https://github.com/user-attachments/assets/3f472bb5-6213-4036-b50a-14807e021f80" />
+
+
 ### **Tearing Down**
 
 - **Tearing down** means Terraform is **cleaning up (destroying)** the resources created during the test.
@@ -65,6 +74,10 @@ Explain the difference between a `plan`-based `command` and an `apply`-based one
 ### Task 3: Security & Cost Scanning
 Run a static analysis tool against your Day 3 or Day 5 code and fix what it flags:
 - **[Trivy](https://github.com/aquasecurity/trivy)**: `trivy config .`
+<img width="1425" height="500" alt="4" src="https://github.com/user-attachments/assets/6f768ad0-9fe9-4452-a739-8f38cf6883aa" />
+<img width="1412" height="875" alt="5" src="https://github.com/user-attachments/assets/dabdc444-fd41-4c81-9f4c-c44faa50a8be" />
+<img width="767" height="147" alt="6" src="https://github.com/user-attachments/assets/b7568c44-5a61-4e77-a2c0-8e4b491a3b20" />
+
 ### **Trivy Findings & Resolutions**
 
 | Issue | Resolution |
@@ -72,14 +85,17 @@ Run a static analysis tool against your Day 3 or Day 5 code and fix what it flag
 | **VPC Flow Logs not enabled** | Enable VPC Flow Logs by setting `enable_flow_log = true` in the VPC module and configure CloudWatch Logs or S3. |
 | **IMDSv2 not enforced** | Add `metadata_options { http_tokens = "required" }` to the `aws_instance` resource. |
 | **Root EBS volume not encrypted** | Add `root_block_device { encrypted = true }` to the `aws_instance` resource to encrypt the root disk. |
-- or **[Checkov](https://www.checkov.io/)**: `checkov -d .`
-- or **[tfsec](https://github.com/aquasecurity/tfsec)** (now part of Trivy).
-- **Bonus:** estimate cloud cost of a plan with **[Infracost](https://www.infracost.io/)**.
+
 
 ### Task 4: CI/CD with GitHub Actions
 - Use the starter workflow at [`./example/.github-workflow-example.yml`](./example/.github-workflow-example.yml).
 - Copy it to `.github/workflows/terraform.yml` in your repo.
 - It runs `fmt -check`, `init`, `validate`, and `plan` on every PR. Explain each step.
+<img width="1347" height="775" alt="7" src="https://github.com/user-attachments/assets/ee8b7d1f-370f-4706-9552-eb36855d52be" />
+<img width="1396" height="647" alt="8" src="https://github.com/user-attachments/assets/6e40bed4-1314-436d-b79e-bd2b5abc4dc7" />
+<img width="1907" height="757" alt="9" src="https://github.com/user-attachments/assets/9524d693-bff8-46e3-8984-a81aeba83ff2" />
+<img width="1882" height="900" alt="10" src="https://github.com/user-attachments/assets/994e447c-7042-47a3-a8ae-b031709e14d7" />
+
 
 ### Task 5: Best Practices Checklist
 Document how your capstone honors these:
@@ -92,49 +108,3 @@ Document how your capstone honors these:
 
 ---
 
-## 🚫 A Note on Provisioners (`remote-exec` / `local-exec`)
-
-You'll see older tutorials configure servers with **provisioners** over SSH. HashiCorp calls these a **last resort**, and here's why:
-- They break Terraform's declarative model — Terraform can't track what a script did.
-- They need SSH keys + open ingress, and fail unpredictably on retries/replacements.
-
-**Modern alternatives (use these instead):**
-- **`user_data`** / cloud-init for boot-time setup (what we used on Day 3).
-- **Baked images** with Packer.
-- **Config management** (Ansible) or **containers** for app-level setup.
-
-Know provisioners exist and how to read them — but reach for them last.
-
----
-
-## 🏗️ CAPSTONE PROJECT — Build Your Own Infra
-
-Bring the whole week together. **Design and deploy a small but real project** on AWS / Azure / GCP / Utho. Ideas:
-- A **2-tier web app**: VPC + public/private subnets + EC2/ASG + security groups + an S3 bucket.
-- A **static website**: S3 + CloudFront (+ optional Route53).
-- A **containerized app** on ECS/Fargate or a small EKS/AKS/GKE cluster.
-
-### 🧭 Reference Implementations (companion repo)
-Two production-grade blueprints to study and adapt — don't just copy, **understand and extend** them:
-- 🏢 **Multi-environment app** → [`aws_module_project/`](https://github.com/LondheShubham153/terraform-for-devops/tree/main/aws_module_project): one reusable module deployed to dev/stg/prd — a great template for requirement #1 (custom module).
-- ☸️ **Production EKS cluster** → [`eks/`](https://github.com/LondheShubham153/terraform-for-devops/tree/main/eks): VPC + EKS via official **registry modules** (VPC `~> 6.0`, EKS `~> 21.0`, Kubernetes **1.35**), Pod Identity, SPOT node groups. Perfect for requirements #1 **and** #2 (registry module).
-  > ⚠️ **Cost warning:** an EKS cluster + 2 NAT gateways is **~$155/mo**. Only spin it up briefly and run `terraform destroy` immediately after. Beginners: start with the multi-env app.
-
-**Requirements:**
-1. Use at least **one custom module** and **one registry module**.
-2. Use **remote state with native S3 locking**.
-3. Drive everything with **variables** + sensible **outputs**.
-4. Pass **`fmt`**, **`validate`**, a **security scan**, and at least one **`terraform test`**.
-5. Wire up the **GitHub Actions** workflow.
-6. Write a **`README.md`** with an architecture diagram and run instructions.
-7. **`terraform destroy`** cleanly when done.
-
----
-
-## 🍫 Bonus (Brownie Points)
-- Use **HCP Terraform (Terraform Cloud)** for remote runs + a private module registry.
-- Add **pre-commit hooks** (`terraform fmt`, `tflint`, `trivy`).
-- Explore **ephemeral resources / write-only arguments** (Terraform 1.10–1.11) for secret handling.
-- Try **OpenTofu** as a drop-in and compare.
-
----
