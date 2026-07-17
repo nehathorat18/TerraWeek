@@ -4,7 +4,6 @@
 
 ---
 
-# 📝 Tasks
 
 ## Task 1: Understand IaC & Terraform
 
@@ -111,16 +110,25 @@ Use the **starter code in `./example`** — it uses the `local` and `random` pro
 
 Run the **core Terraform workflow** and capture the output of each step:
 
-```bash
-cd example
-terraform init      # download providers, initialize the working directory
-terraform fmt       # format your code
-terraform validate  # check for syntax errors
-terraform plan      # preview what will be created
-terraform apply     # create the resources (type: yes)
-cat greeting.txt    # see the file Terraform generated
-terraform destroy   # clean up (type: yes)
-```
+
+- cd example
+- terraform init      # download providers, initialize the working directory
+<img width="866" height="590" alt="image" src="https://github.com/user-attachments/assets/a48a82dc-13b1-49d3-a25a-81ade755d712" />
+
+- terraform fmt       # format your code
+- terraform validate  # check for syntax errors
+- terraform plan      # preview what will be created
+<img width="1413" height="837" alt="image" src="https://github.com/user-attachments/assets/cae349f9-c2f5-4b8d-b734-e44116a47d47" />
+
+- terraform apply     # create the resources (type: yes)
+<img width="978" height="877" alt="image" src="https://github.com/user-attachments/assets/f59c60e2-2ab8-4e46-9d56-e565eec4da91" />
+
+- cat greeting.txt    # see the file Terraform generated
+<img width="733" height="72" alt="image" src="https://github.com/user-attachments/assets/97d79def-5a35-4164-af59-b210639ef485" />
+
+- terraform destroy   # clean up (type: yes)
+<img width="1447" height="880" alt="image" src="https://github.com/user-attachments/assets/33812776-2557-40d7-a3ee-14b16ceff891" />
+
 
 ---
 
@@ -140,6 +148,27 @@ Write  ──▶  Init  ──▶  Plan  ──▶  Apply  ──▶  Destroy
 ```bash
 terraform -install-autocomplete
 ```
+This enables **tab completion** for Terraform commands and resource names, making the CLI easier and faster to use.
 
 - Try **OpenTofu** (the open-source fork) and note the differences.
+**OpenTofu** is the open-source fork of Terraform.
+
+**Difference:**
+- **Terraform** → Owned by HashiCorp (BUSL license)
+- **OpenTofu** → Community-maintained and fully open source (MPL 2.0)
+
+Most Terraform code works in OpenTofu without changes.
+
 - Explore the `.terraform.lock.hcl` lock file that gets created — what is it for?
+The **`.terraform.lock.hcl`** file is created during `terraform init`.
+
+It stores:
+- The exact provider versions
+- Provider checksums (hashes)
+
+**Why is it used?**
+- Keeps provider versions consistent for everyone.
+- Verifies downloaded providers are safe.
+- Prevents unexpected version changes.
+
+---
